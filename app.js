@@ -10,10 +10,13 @@ var RateLimit = require("express-rate-limit");
 
 //db connection
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://127.0.0.1:27017/express-server", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  "mongodb+srv://admin:S6Jb-NrhA7edCxe@cluster0.fmbhm.mongodb.net/express-server",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 var indexRouter = require("./src/routes/index");
 var usersRouter = require("./src/routes/users");
