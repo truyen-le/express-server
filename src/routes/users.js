@@ -8,7 +8,7 @@ const {
   deleteUserById,
   login,
   register,
-} = require("../controllers/userController");
+} = require("../controllers/user.controller");
 var router = express.Router();
 
 /* GET users listing. */

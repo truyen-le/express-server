@@ -1,13 +1,15 @@
-var mongoose = require("mongoose");
-var bcrypt = require("bcrypt");
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const Schema = mongoose.Schema;
 
 const UserSchema = Schema({
   username: {
     type: String,
+    trim: true,
     required: true,
     lowercase: true,
+    unique: true,
   },
   hashPassword: {
     type: String,
@@ -23,9 +25,11 @@ const UserSchema = Schema({
   },
   email: {
     type: String,
+    trim: true,
     lowercase: true,
+    unique: true,
   },
-  createdDate: {
+  createdAt: {
     type: Date,
     default: Date.now,
   },
@@ -35,4 +39,6 @@ UserSchema.methods.comparePassword = (password, hashPassword) => {
   return bcrypt.compareSync(password, hashPassword);
 };
 
-module.exports = { UserSchema };
+const User = mongoose.model("user", UserSchema);
+
+module.exports = { User };

@@ -1,3 +1,4 @@
+var dotenv = require("dotenv").config();
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
@@ -8,15 +9,17 @@ var mongoose = require("mongoose");
 var jwt = require("jsonwebtoken");
 var RateLimit = require("express-rate-limit");
 
+let DB_URL = process.env.DB_URL;
+
 //db connection
 mongoose.Promise = global.Promise;
-mongoose.connect(
-  "mongodb+srv://admin:S6Jb-NrhA7edCxe@cluster0.fmbhm.mongodb.net/express-server",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
+mongoose.connect(DB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
+  autoIndex: true,
+});
 
 var indexRouter = require("./src/routes/index");
 var usersRouter = require("./src/routes/users");
@@ -42,6 +45,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+let JWT_SECRET = process.env.JWT_SECRET;
+
 //JWT setup
 app.use((req, res, next) => {
   if (
@@ -51,10 +56,11 @@ app.use((req, res, next) => {
   ) {
     jwt.verify(
       req.headers.authorization.split(" ")[1],
-      "ichigorg",
+      JWT_SECRET,
       (err, decode) => {
         if (err) req.user = undefined;
         req.user = decode;
+        req.token = req.headers.authorization.split(" ")[1];
       }
     );
   }
