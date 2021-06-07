@@ -13,7 +13,7 @@ const loginRequired = (req, res, next) => {
       if (err) {
         return res.status(401).json({ message: err });
       } else if (!token) {
-        return res.status(401).json({ message: "Token timeout" });
+        return res.status(401).json({ message: "Session expired. Please login again!" });
       } else {
         next();
       }
