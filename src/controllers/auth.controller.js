@@ -73,11 +73,11 @@ const register = async (req, res) => {
 
   newUser.save((err, user) => {
     if (err) {
-      //   if (err.name === "MongoError" && err.code === 11000) {
-      //     return res
-      //       .status(400)
-      //       .send({ message: "username or email is already registered" });
-      //   }
+        if (err.name === "MongoError" && err.code === 11000) {
+          return res
+            .status(400)
+            .send({ message: "username or email is already registered" });
+        }
       return res.status(400).send({ message: err.message });
     }
     user.hashPassword = undefined;
