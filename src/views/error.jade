@@ -1,6 +1,11 @@
 extends layout
 
 block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+  #notfound
+    .notfound
+      .notfound-404
+        h1 :(
+      .notfound-message
+        h2 #{error.status} - #{message}
+        p An error has occured.
+        a Learn more

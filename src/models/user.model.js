@@ -7,27 +7,33 @@ const UserSchema = Schema({
   username: {
     type: String,
     trim: true,
-    required: true,
     lowercase: true,
     unique: true,
+    sparse: true,
   },
   hashPassword: {
     type: String,
-    required: true,
+    required: [true, "Password is required to register"],
   },
   firstName: {
     type: String,
-    required: "Enter a firstname",
+    // required: "Enter a firstname",
   },
   lastName: {
     type: String,
-    required: "Enter a lastname",
+    // required: "Enter a lastname",
+  },
+  gender: {
+    type: String,
+    enum: ["male", "female", "other"],
   },
   email: {
     type: String,
     trim: true,
+    required: [true, "Email is required to register"],
     lowercase: true,
     unique: true,
+    sparse: true,
   },
   createdAt: {
     type: Date,
@@ -41,4 +47,4 @@ UserSchema.methods.comparePassword = (password, hashPassword) => {
 
 const User = mongoose.model("user", UserSchema);
 
-module.exports = { User };
+module.exports = User;

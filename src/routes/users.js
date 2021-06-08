@@ -1,14 +1,13 @@
 var express = require('express');
 
 const {
-  loginRequired,
   getUsers,
   getUserById,
   updateUserById,
   deleteUserById,
-  login,
-  register,
 } = require("../controllers/user.controller");
+const { loginRequired } = require("../controllers/auth.controller");
+
 var router = express.Router();
 
 /* GET users listing. */
@@ -20,8 +19,6 @@ router.put("/", loginRequired,updateUserById);
 
 router.delete("/", loginRequired,deleteUserById);
 
-router.post("/login",login);
 
-router.post("/register",register);
 
 module.exports = router;
