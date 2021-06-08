@@ -6,6 +6,6 @@ block content
       .notfound-404
         h1 :(
       .notfound-message
-        h2 #{error.status} - #{message}
+        h2 #{error.status ?? "Error"} - #{message}
         p An error has occured.
         a Learn more

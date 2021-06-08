@@ -25,8 +25,15 @@ const loginRequired = (req, res, next) => {
 };
 
 const login = (req, res) => {
+  let query = [];
+  if (req.body.email) {
+    query.push({ email: req.body.email });
+  }
+  if (req.body.username) {
+    query.push({ username : req.body.username });
+  }
   User.findOne(
-    { $or: [{ email: req.body.email }, { username: req.body.username }] },
+    { $or: query },
     (err, user) => {
       if (err) {
         return res.status(401).send({ message: err.message });
