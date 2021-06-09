@@ -13,7 +13,7 @@ var router = express.Router();
 /* GET users listing. */
 router.get("/", loginRequired,getUsers);
 
-router.get("/:id", loginRequired,getUserById);
+router.get("/:id", loginRequired, getUserById);
 
 router.put("/", loginRequired,updateUserById);
 
