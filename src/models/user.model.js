@@ -42,6 +42,9 @@ const UserSchema = Schema({
 });
 
 UserSchema.methods.comparePassword = (password, hashPassword) => {
+  if (!password) {
+    return false;
+  }
   return bcrypt.compareSync(password, hashPassword);
 };
 
