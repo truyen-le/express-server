@@ -32,6 +32,20 @@ const loginRequired = (req, res, next) => {
   }
 };
 
+const passwordRequired = (req, res, next) => {
+    User.findById(req.user._id, (err, user) => {
+      if (err) {
+        return res.status(400).send({ message: err.message });
+      }
+      if (!user.comparePassword(req.body.password, user.hashPassword)) {
+        return res
+          .status(401)
+          .send({ message: "Authentication failed. Incorrect password" });
+      }
+      next();
+    });
+}
+
 const login = (req, res) => {
   let query = [];
   if (req.body.email) {
@@ -98,7 +112,7 @@ const register = async (req, res) => {
 };
 
 module.exports = {
-  loginRequired,
+  loginRequired,passwordRequired,
   login,
   register,
 };

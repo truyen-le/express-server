@@ -4,9 +4,10 @@ const {
   getProfile,
   updateProfile,
   deleteProfile,
+  updatePassword,
 } = require("../controllers/profile.controller");
 
-const { loginRequired } = require("../controllers/auth.controller");
+const { loginRequired, passwordRequired } = require("../controllers/auth.controller");
 
 var router = express.Router();
 
@@ -15,6 +16,8 @@ router.get("/", loginRequired, getProfile);
 
 router.put("/", loginRequired, updateProfile);
 
-router.delete("/", loginRequired, deleteProfile);
+router.put("/update-password", loginRequired, passwordRequired, updatePassword);
+
+router.delete("/", loginRequired, passwordRequired, deleteProfile);
 
 module.exports = router;

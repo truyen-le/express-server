@@ -1,4 +1,8 @@
+const bcrypt = require("bcrypt");
+
 const User = require("../models/user.model");
+
+let bcryptSalt = process.env.BCRYPT_SALT;
 
 const getProfile = (req, res) => {
   User.findById(req.user._id, (err, user) => {
@@ -11,24 +15,46 @@ const getProfile = (req, res) => {
 };
 
 const updateProfile = (req, res) => {
-  User.findByIdAndUpdate(req.user._id, req.body, { new: true }, (err, user) => {
-    if (err) {
-      return res.status(400).send({ message: err.message });
+  req.body.hashPassword = undefined;
+  User.findByIdAndUpdate(
+    req.user._id,
+    req.body,
+    { new: true, omitUndefined: true },
+    (err, user) => {
+      if (err) {
+        return res.status(400).send({ message: err.message });
+      }
+      user.hashPassword = undefined;
+      return res.json(user);
     }
-    user.hashPassword = undefined;
-    return res.json(user);
-  });
+  );
+};
+
+const updatePassword = (req, res) => {
+  if (!req.body.newPassword) {
+    return res.status(400).send({ message: "New password is required" });
+  }
+
+    let hashPassword = bcrypt.hashSync(req.body.newPassword, Number(bcryptSalt));
+
+  User.findByIdAndUpdate(
+    req.user._id,
+    {hashPassword:hashPassword},
+    { new: true, omitUndefined: true },
+    (err, user) => {
+      if (err) {
+        return res.status(400).send({ message: err.message });
+      }
+      user.hashPassword = undefined;
+      return res.json(user);
+    }
+  );
 };
 
 const deleteProfile = (req, res) => {
   User.findByIdAndDelete(req.user._id, (err, user) => {
     if (err) {
       return res.status(400).send({ message: err.message });
-    }
-    if (!user.comparePassword(req.body.password, user.hashPassword)) {
-      return res
-        .status(401)
-        .send({ message: "Authentication failed. Incorrect password" });
     }
     return res.json({ message: `Sucess delete user ${user._id}` });
   });
@@ -37,5 +63,6 @@ const deleteProfile = (req, res) => {
 module.exports = {
   getProfile,
   updateProfile,
+  updatePassword,
   deleteProfile,
 };
