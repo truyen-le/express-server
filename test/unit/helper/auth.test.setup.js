@@ -19,40 +19,14 @@ let testSetup = () => {
       .on("error", (error) => done(error));
   });
 
-  beforeEach((done) => {
-    mongoose.connection.db
-      .listCollections({ name: "users" })
-      .next((error, collection) => {
-        //deleting the collection before each
-        if (collection) {
-          //test case to avoid duplicated key error
-          mongoose.connection.db
-            .dropCollection("users")
-            .then(() => done())
-            .catch((err) => done(err));
-        } else {
-          done(error);
-        }
-      });
-    // mongoose.connection.db
-    //   .listCollections({ name: "auths" })
-    //   .finally((error, collection) => {
-    //     //deleting the collection before each
-    //     if (collection) {
-    //       //test case to avoid duplicated key error
-    //       mongoose.connection.db
-    //         .dropCollection("auths")
-    //         // .then(() => done())
-    //         .catch((err) => done(err));
-    //     } else {
-    //       done(error);
-    //     }
-    //   });
+  beforeEach(async () => {
+    await mongoose.connection.db.dropCollection("auths");
+    await mongoose.connection.db.dropCollection("users");
   });
 
-  after((done) => {
+  after(async () => {
     // runs after the last test case
-    mongoose.connection.dropDatabase();
+    await mongoose.connection.dropDatabase();
     mongoose
       .disconnect()
       .then(() => done())
