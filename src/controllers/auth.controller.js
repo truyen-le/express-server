@@ -33,18 +33,18 @@ const loginRequired = (req, res, next) => {
 };
 
 const passwordRequired = (req, res, next) => {
-    User.findById(req.user._id, (err, user) => {
-      if (err) {
-        return res.status(400).send({ message: err.message });
-      }
-      if (!user.comparePassword(req.body.password, user.hashPassword)) {
-        return res
-          .status(401)
-          .send({ message: "Authentication failed. Incorrect password" });
-      }
-      next();
-    });
-}
+  User.findById(req.user._id, (err, user) => {
+    if (err) {
+      return res.status(400).send({ message: err.message });
+    }
+    if (!user.comparePassword(req.body.password, user.hashPassword)) {
+      return res
+        .status(401)
+        .send({ message: "Authentication failed. Incorrect password" });
+    }
+    next();
+  });
+};
 
 const login = (req, res) => {
   let query = [];
@@ -97,22 +97,23 @@ const register = async (req, res) => {
     );
   }
 
-  newUser.save((err, user) => {
-    if (err) {
-      if (err.name === "MongoError" && err.code === 11000) {
-        return res
-          .status(400)
-          .send({ message: "username or email is already registered" });
-      }
-      return res.status(400).send({ message: err.message });
+  try {
+    const result = await newUser.save();
+    result.hashPassword = undefined;
+    return res.status(201).json(result);
+  } catch (err) {
+    if (err.name === "MongoError" && err.code === 11000) {
+      return res
+        .status(400)
+        .send({ message: "username or email is already registered" });
     }
-    user.hashPassword = undefined;
-    return res.json(user);
-  });
+    return res.status(400).send({ message: err.message });
+  }
 };
 
 module.exports = {
-  loginRequired,passwordRequired,
+  loginRequired,
+  passwordRequired,
   login,
   register,
 };

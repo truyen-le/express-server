@@ -1,9 +1,14 @@
 {
   "name": "express-server",
   "version": "0.0.0",
+  "description": "A Expressjs server with MongoDB",
+  "main": "./bin/www",
+  "author": "Le Minh Truyen",
+  "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "mocha --recursive --exit --timeout 10000"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -19,5 +24,12 @@
     "mongodb": "^3.6.9",
     "mongoose": "^5.12.12",
     "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "mocha": "^9.0.0",
+    "node-mocks-http": "^1.10.1",
+    "supertest": "^6.1.3"
   }
 }
