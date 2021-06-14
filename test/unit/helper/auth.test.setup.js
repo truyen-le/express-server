@@ -52,8 +52,7 @@ let testSetup = () => {
 
   after((done) => {
     // runs after the last test case
-    mongoose.connection.db.dropCollection("auths");
-    mongoose.connection.db.dropCollection("users");
+    mongoose.connection.dropDatabase();
     mongoose
       .disconnect()
       .then(() => done())
