@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
-const TEST_DB_URL = "mongodb://127.0.0.1:27017/express-server";
+const TEST_DB_URL =
+  "mongodb+srv://admin:S6Jb-NrhA7edCxe@cluster0.fmbhm.mongodb.net/express-server-test";
 
 let testSetup = () => {
   before((done) => {
